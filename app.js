@@ -1,4 +1,3 @@
-const { response } = require('express');
 const express = require('express');
 const request = require('request');
 const jsonParser = express.json();
@@ -15,12 +14,15 @@ app.get('/', (req, res) => {
 });
 
 app.get('/drugs/name', jsonParser, (req, res, next) => {
-    const { type, url, dataType } = req.body;
-    for (const field of ['type', 'url', 'dataType'])
-        if (!req.body[field])
-            return res.status(400).json({
-                error: `Missing ${field} in request body`
-            });
+    console.log(req.body);
+    const { url } = req.body;
+
+    if (!req.body.url !==  url) {
+        return res.status(400).json({
+            error: `Missing ${url} in request body`
+        });
+    }   
+        
     request(
         { url: url },
         (error, response, body) => {
@@ -35,5 +37,3 @@ app.get('/drugs/name', jsonParser, (req, res, next) => {
 app.listen(8000, () => {
     console.log('The oven is cooking on PORT 8000');
 });
-
-// console.log('working');
